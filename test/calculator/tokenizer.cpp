@@ -1,9 +1,9 @@
 #include "calculator/tokenizer.hpp"
 #include "catch.hpp"
 
-#define token(x) (tokenizer.process((x)).begin())
-
 using namespace XX::Calculator;
+
+#define token(x) (tokenizer.process((x)).begin())
 
 TEST_CASE("single tokens", "[tokenizer]") {
   Tokenizer tokenizer;
@@ -54,6 +54,59 @@ TEST_CASE("single tokens", "[tokenizer]") {
       REQUIRE(token("+1")->type == TokenType::NUMBER);
       REQUIRE(token("+1e-23")->type == TokenType::NUMBER);
       REQUIRE(token("+1e-23")->value == "+1e-23");
+    }
+  }
+}
+
+TEST_CASE("expression tokenization", "[tokenizer]") {
+  Tokenizer tokenizer;
+
+  {
+    auto t = tokenizer.process("2+2");
+    REQUIRE(t.front().type == TokenType::NUMBER); t.pop_front();
+    REQUIRE(t.front().type == TokenType::OPERATOR); t.pop_front();
+    REQUIRE(t.front().type == TokenType::NUMBER); t.pop_front();
+  }
+
+  {
+    auto t = tokenizer.process("2+x");
+    REQUIRE(t.front().type == TokenType::NUMBER); t.pop_front();
+    REQUIRE(t.front().type == TokenType::OPERATOR); t.pop_front();
+    REQUIRE(t.front().type == TokenType::IDENTIFIER); t.pop_front();
+  }
+
+  {
+    auto t = tokenizer.process("x=2");
+    REQUIRE(t.front().type == TokenType::IDENTIFIER); t.pop_front();
+    REQUIRE(t.front().type == TokenType::OPERATOR); t.pop_front();
+    REQUIRE(t.front().type == TokenType::NUMBER); t.pop_front();
+  }
+
+  SECTION("signed numbers") {
+    {
+      auto t = tokenizer.process("-2--2");
+      REQUIRE(t.size() == 3);
+      REQUIRE(t.front().value == "-2"); t.pop_front();
+      REQUIRE(t.front().value == "-"); t.pop_front();
+      REQUIRE(t.front().value == "-2"); t.pop_front();
+    }
+
+    {
+      auto t = tokenizer.process("(1+2)+-2");
+      REQUIRE(t.size() == 7);
+      REQUIRE(t.back().value == "-2");
+    }
+
+    {
+      auto t = tokenizer.process("(1+2)++2");
+      REQUIRE(t.size() == 7);
+      REQUIRE(t.back().value == "+2");
+    }
+
+    {
+      auto t = tokenizer.process("x--2");
+      REQUIRE(t.size() == 3);
+      REQUIRE(t.back().value == "-2");
     }
   }
 }
