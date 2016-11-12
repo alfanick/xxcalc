@@ -49,11 +49,22 @@ TEST_CASE("single tokens", "[tokenizer]") {
       REQUIRE(token("1.01e+23")->value == "1.01e+23");
     }
 
-    SECTION("signed numbers") {
+    SECTION("signed") {
       REQUIRE(token("-1")->type == TokenType::NUMBER);
       REQUIRE(token("+1")->type == TokenType::NUMBER);
       REQUIRE(token("+1e-23")->type == TokenType::NUMBER);
       REQUIRE(token("+1e-23")->value == "+1e-23");
+    }
+
+    SECTION("special") {
+      REQUIRE(token("inf")->type == TokenType::NUMBER);
+      REQUIRE(token("-inf")->type == TokenType::NUMBER);
+      REQUIRE(token("Infinity")->type == TokenType::NUMBER);
+      REQUIRE(token("-Infinity")->type == TokenType::NUMBER);
+      REQUIRE(token("nan")->type == TokenType::NUMBER);
+      REQUIRE(token("NaN")->type == TokenType::NUMBER);
+
+      REQUIRE(token("-Infinity")->value == "-Infinity");
     }
   }
 }

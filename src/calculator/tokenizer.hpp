@@ -133,6 +133,14 @@ class Tokenizer {
   Token extract_identifier(std::string const& line, size_t position) const;
 
   /**
+   * Converts special identifiers into numbers such as
+   * Infinity or NaN value.
+   *
+   * @param[inmout] tokens Tokenized expression
+   */
+  void convert_special_numbers(TokenList& tokens) const;
+
+  /**
    * Merges specific addition and subtraction operator with numbers,
    * therefore creating signed numbers. An operator can be used as
    * a sign of the number if it is used at very beginning of the expression,

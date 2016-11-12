@@ -55,9 +55,10 @@ TokenList Tokenizer::process(std::string const& line) const {
     }
   }
 
+  // Convert infinity and nan
+  convert_special_numbers(tokens);
   // Merge sign operators with numbers
   merge_signs(tokens);
-  // TODO nan and infinity
 
   return tokens;
 }
@@ -129,8 +130,24 @@ Token Tokenizer::extract_identifier(std::string const& line, size_t position) co
   return token;
 }
 
+void Tokenizer::convert_special_numbers(TokenList& tokens) const {
+  // Process from left to right
+  for (auto token = tokens.begin(); token != tokens.end(); ++token) {
+    // Processing only identifiers
+    if (token->type != TokenType::IDENTIFIER)
+      continue;
+
+    // Convert infinity and nan to number
+    if (strcasecmp(token->value.c_str(), "inf") == 0 ||
+        strcasecmp(token->value.c_str(), "infinity") == 0 ||
+        strcasecmp(token->value.c_str(), "nan") == 0) {
+      token->type = TokenType::NUMBER;
+    }
+  }
+}
+
 void Tokenizer::merge_signs(TokenList& tokens) const {
-  // Process from right ot left
+  // Process from right to left
   for (auto token = tokens.end(); token != tokens.begin(); --token) {
     // Look for sign only before a number
     if (token->type != TokenType::NUMBER)
