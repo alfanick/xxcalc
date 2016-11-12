@@ -13,9 +13,28 @@ elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_GNU_FLAGS}")
 endif()
 
+include(ExternalProject)
+find_package(Git REQUIRED)
+
+ExternalProject_Add(
+    catch
+    PREFIX ${CMAKE_BINARY_DIR}/catch
+    GIT_REPOSITORY https://github.com/philsquared/Catch.git
+    TIMEOUT 10
+    UPDATE_COMMAND ${GIT_EXECUTABLE} pull
+    CONFIGURE_COMMAND ""
+    BUILD_COMMAND ""
+    INSTALL_COMMAND ""
+    LOG_DOWNLOAD ON
+   )
+
+ExternalProject_Get_Property(catch source_dir)
+set(CATCH_INCLUDE_DIR ${source_dir}/include CACHE INTERNAL "Path to include folder for Catch")
+
 set(EXT_PROJECTS_DIR "${PROJECT_SOURCE_DIR}/ext")
 set(SOURCE_DIR "${PROJECT_SOURCE_DIR}/src")
 set(COMMON_INCLUDES "${SOURCE_DIR}")
 set(TEST_DIR "${PROJECT_SOURCE_DIR}/test")
 
 add_subdirectory("${SOURCE_DIR}/apps")
+
