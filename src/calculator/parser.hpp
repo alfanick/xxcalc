@@ -80,8 +80,7 @@ class Parser {
    *
    * @throw UnknownFunctionError When function is not registered
    * @throw UnknownOperatorError When operator is not registered
-   * @throw MissingBracketError When closing bracket is missing
-   * @throw UnblaancedBracketError When brackets are unbalanced
+   * @throw MissingBracketError When brackets are unbalanced
    * @throw ParsingError When multiple expressions are provided
    *                     or other error occurs
    * @throw EmptyExpressionError When no expression is provdied

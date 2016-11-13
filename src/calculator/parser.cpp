@@ -145,13 +145,16 @@ Node::unique Parser::process(TokenList tokens) const {
       if (!found) {
         throw MissingBracketError(token.position);
       }
+    } else
+    if (token.type == TokenType::UNKNOWN) {
+      throw ParsingError("Unknown token", token.position);
     }
   }
 
   // put remaining
   while (!ops.empty()) {
     if (ops.top().type == TokenType::BRACKET_OPENING) {
-      throw UnbalancedBracketError(ops.top().position);
+      throw MissingBracketError(ops.top().position);
     }
 
     stack.emplace(create_function(ops.top(), stack));

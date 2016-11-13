@@ -7,7 +7,7 @@ namespace Calculator {
 
 class ParsingError : public std::runtime_error {
   public:
-  ParsingError(std::string const& msg, size_t position) : std::runtime_error(msg + " at " + std::to_string(position+1)) { }
+  ParsingError(std::string const& msg, size_t position) : std::runtime_error(msg + " at " + std::to_string(position+1) + " character") { }
 };
 
 class EmptyExpressionError : public ParsingError {
@@ -38,11 +38,6 @@ class OperandMissingError : public ParsingError {
 class MissingBracketError : public ParsingError {
   public:
   MissingBracketError(size_t position) : ParsingError("Bracket is missing", position) { }
-};
-
-class UnbalancedBracketError : public ParsingError {
-  public:
-  UnbalancedBracketError(size_t position) : ParsingError("Unexpected bracket", position) { }
 };
 
 }

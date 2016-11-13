@@ -19,6 +19,10 @@ struct Node {
   typedef std::unique_ptr<Node> unique;
 
   Node(size_t position) : position(position) { }
+
+  virtual std::string repr() const {
+    return "";
+  }
 };
 
 struct FunctionNode : public Node {
@@ -37,6 +41,10 @@ struct FunctionNode : public Node {
     return repr;
   }
   FunctionNode(std::string const& name, std::vector<std::unique_ptr<Node>> && arguments, size_t position) : Node(position), name(name), arguments(std::move(arguments)) { }
+
+  virtual std::string repr() const {
+    return name;
+  }
 };
 
 struct SymbolNode : public Node {
@@ -44,6 +52,10 @@ struct SymbolNode : public Node {
 
   std::string id() { return "Symbol("+name+")"; }
   SymbolNode(std::string const& name, size_t position) : Node(position), name(name) {}
+
+  virtual std::string repr() const {
+    return name;
+  }
 };
 
 struct ValueNode : public Node {
@@ -53,6 +65,10 @@ struct ValueNode : public Node {
   ValueNode(std::string const& value, size_t position) : Node(position), value(std::stod(value)) {}
 
   virtual double evaluate() { return value; }
+
+  virtual std::string repr() const {
+    return std::to_string(value);
+  }
 };
 
 }
