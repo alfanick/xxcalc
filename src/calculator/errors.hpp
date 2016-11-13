@@ -7,7 +7,13 @@ namespace Calculator {
 
 class ParsingError : public std::runtime_error {
   public:
-  ParsingError(std::string const& msg, size_t position) : std::runtime_error(msg + " at " + std::to_string(position+1) + " character") { }
+  ParsingError(std::string const& msg, size_t position) : std::runtime_error(msg + " at " + std::to_string(position) + " character") { }
+};
+
+class EvaluationError : public std::runtime_error {
+  public:
+  EvaluationError(std::string const& msg) : std::runtime_error(msg) { }
+  EvaluationError(std::string const& msg, size_t position) : EvaluationError(msg + " at " + std::to_string(position)) { }
 };
 
 class EmptyExpressionError : public ParsingError {
@@ -20,19 +26,19 @@ class UnknownOperatorError : public ParsingError {
   UnknownOperatorError(std::string const& value, size_t position) : ParsingError("Unknown operator '" + value + "'", position) { }
 };
 
-class UnknownFunctionError : public ParsingError {
+class UnknownFunctionError : public EvaluationError {
   public:
-  UnknownFunctionError(std::string const& value, size_t position) : ParsingError("Unknown function '" + value + "'", position) { }
+  UnknownFunctionError(std::string const& value, size_t position) : EvaluationError("Unknown function '" + value + "'", position) { }
 };
 
-class ArgumentMissingError : public ParsingError {
+class ArgumentMissingError : public EvaluationError {
   public:
-  ArgumentMissingError(std::string const& value, size_t position) : ParsingError("Argument is missing for function '"+value+"'", position) { }
+  ArgumentMissingError(std::string const& value, size_t position) : EvaluationError("Argument is missing for function '"+value+"'", position) { }
 };
 
-class OperandMissingError : public ParsingError {
+class OperandMissingError : public EvaluationError {
   public:
-  OperandMissingError(std::string const& value, size_t position) : ParsingError("Operand is missing for '"+value+"'", position) { }
+  OperandMissingError(std::string const& value, size_t position) : EvaluationError("Operand is missing for '"+value+"'", position) { }
 };
 
 class MissingBracketError : public ParsingError {

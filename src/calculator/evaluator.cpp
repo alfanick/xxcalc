@@ -1,21 +1,54 @@
 #include "evaluator.hpp"
+#include "errors.hpp"
 
-#include "node.hpp"
+#include <stack>
 
 namespace XX {
 namespace Calculator {
 
 
-void Evaluator::register_function(std::string const& name, std::function<std::unique_ptr<Node>(std::vector<std::unique_ptr<Node>> const&)> f) {
-  functions[name] = f;
+void Evaluator::register_function(std::string const& name, size_t arity, std::function<double(std::vector<double> const&)> f) {
+  functions.emplace(name, Function(arity, f));
 }
 
-std::unique_ptr<Node> Evaluator::call(std::string const& symbol) {
-  return nullptr;
-}
+double Evaluator::process(TokenList& tokens) {
+  std::stack<double> stack;
 
-std::unique_ptr<Node> Evaluator::call(std::string const& name, std::vector<std::unique_ptr<Node>> const& arguments) {
-  return functions[name](std::move(arguments));
+  while (!tokens.empty()) {
+    auto token = tokens.front();
+    tokens.pop_front();
+
+    if (token.type == TokenType::NUMBER) {
+      stack.push(std::stod(token.value));
+    } else
+    if (token.type == TokenType::OPERATOR ||
+        token.type == TokenType::IDENTIFIER) {
+      auto function = functions.find(token.value);
+      if (function == functions.end()) {
+        throw UnknownFunctionError(token.value, token.position);
+      }
+
+      if (stack.size() < function->second.arity) {
+        throw ArgumentMissingError(token.value, token.position);
+      } else {
+        std::vector<double> args;
+        args.resize(function->second.arity);
+
+        for (int i = function->second.arity-1; i >= 0; i--) {
+          args[i] = stack.top();
+          stack.pop();
+        }
+
+        stack.push(function->second.handle(args));
+      }
+    }
+  }
+
+  if (stack.size() == 1) {
+    return stack.top();
+  } else {
+    throw EvaluationError("Only single expression is allowed", 0);
+  }
 }
 
 }

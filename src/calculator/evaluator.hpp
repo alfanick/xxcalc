@@ -2,26 +2,29 @@
 #include <vector>
 #include <map>
 
+#include "tokenizer.hpp"
+
 #pragma once
 
 namespace XX {
 namespace Calculator {
 
-struct Node;
-
 class Evaluator {
   public:
 
-  void register_function(std::string const& name, std::function<std::unique_ptr<Node>(std::vector<std::unique_ptr<Node>> const&)> f);
+  void register_function(std::string const& name, size_t arity, std::function<double(std::vector<double> const&)> f);
 
-  virtual std::unique_ptr<Node> call(std::string const& symbol);
-  virtual std::unique_ptr<Node> call(std::string const& name, std::vector<std::unique_ptr<Node>> const& arguments);
-
-  double process(std::unique_ptr<Node> root);
+  double process(TokenList& tokens);
 
   private:
 
-  std::map<std::string, std::function<std::unique_ptr<Node>(std::vector<std::unique_ptr<Node>> const&)>> functions;
+  struct Function {
+    size_t arity;
+    std::function<double(std::vector<double> const&)> handle;
+
+    Function(size_t arity, std::function<double(std::vector<double> const&)> handle) : arity(arity), handle(handle) { }
+  };
+  std::map<std::string, Function> functions;
 };
 
 }

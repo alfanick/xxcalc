@@ -17,11 +17,6 @@ void Parser::register_operator(std::string const& value, int p, int a) {
   operators.emplace(value, Operator(p, a));
 }
 
-void Parser::register_function(std::string const& value, size_t a) {
-  functions.emplace(value, Function(a));
-  operators.emplace(value, Operator(std::numeric_limits<int>::max(), -1));
-}
-
 bool Parser::lower_precedence(Token const& a, Token const& b) const {
   auto operator_a = operators.find(a.value);
   auto operator_b = operators.find(b.value);
@@ -33,41 +28,9 @@ bool Parser::lower_precedence(Token const& a, Token const& b) const {
           operator_a->second.precedence < operator_b->second.precedence);
 }
 
-Node::unique Parser::create_function(Token const& token, std::stack<Node::unique> &stack) const {
-  size_t arity = 0;
-
-  // operators are always two-argument
-  if (token.type == TokenType::OPERATOR) {
-    arity = 2;
-  } else {
-    auto function = functions.find(token.value);
-    arity = function->second.arity;
-  }
-
-  // stack must contain required arity
-  if (stack.size() < arity) {
-    if (token.type == TokenType::OPERATOR) {
-      throw OperandMissingError(token.value, token.position);
-    } else {
-      throw ArgumentMissingError(token.value, token.position);
-    }
-  }
-
-  std::vector<Node::unique> args;
-  args.resize(arity);
-
-  // pass arguments to function
-  for (int i = arity - 1; i >= 0; i--) {
-    args[i] = std::move(stack.top());
-    stack.pop();
-  }
-
-  return Node::unique(new FunctionNode(token.value, std::move(args)));
-}
-
-Node::unique Parser::process(TokenList&& tokens) const {
+TokenList Parser::process(TokenList&& tokens) const {
   std::stack<Token> ops;
-  std::stack<Node::unique> stack;
+  TokenList output;
 
   // parse from left to right
   while (!tokens.empty()) {
@@ -76,8 +39,8 @@ Node::unique Parser::process(TokenList&& tokens) const {
 
     // convert number to leaf node
     if (token.type == TokenType::NUMBER) {
-      // put a number on stack
-      stack.emplace(new ValueNode(token.value));
+      // push number
+      output.push_back(token);
 
       // check if implicit multiplication
       if (!tokens.empty() &&
@@ -91,15 +54,10 @@ Node::unique Parser::process(TokenList&& tokens) const {
     if (token.type == TokenType::IDENTIFIER) {
       // check if function (must be followed by brackets)
       if (!tokens.empty() && tokens.front().type == TokenType::BRACKET_OPENING) {
-        // function must be registered
-        if (functions.find(token.value) != functions.end()) {
-          ops.push(token);
-        } else {
-          throw UnknownFunctionError(token.value, token.position);
-        }
+        ops.push(token);
       } else {
         // must be a variable/symbol
-        stack.emplace(new SymbolNode(token.value));
+        output.push_back(token);
       }
     } else
     // operator creates a function node
@@ -110,7 +68,7 @@ Node::unique Parser::process(TokenList&& tokens) const {
         if ((ops.top().type == TokenType::OPERATOR || ops.top().type == TokenType::IDENTIFIER) &&
             lower_precedence(token, ops.top())) {
           // create function with args
-          stack.emplace(create_function(ops.top(), stack));
+          output.push_back(ops.top());
           ops.pop();
         } else {
           break;
@@ -138,7 +96,7 @@ Node::unique Parser::process(TokenList&& tokens) const {
           break;
         } else {
           // create args
-          stack.emplace(create_function(ops.top(), stack));
+          output.push_back(ops.top());
           ops.pop();
         }
       }
@@ -157,22 +115,15 @@ Node::unique Parser::process(TokenList&& tokens) const {
       throw MissingBracketError(ops.top().position);
     }
 
-    stack.emplace(create_function(ops.top(), stack));
+    output.push_back(ops.top());
     ops.pop();
   }
 
-  // everything shoudl become a single expression
-  if (stack.size() > 1) {
-    while (stack.size() >= 2)
-      stack.pop();
-    throw ParsingError("Only single expression is allowed", 0);
-  } else
-  if (stack.empty()) {
+  if (output.empty()) {
     throw EmptyExpressionError();
   }
 
-
-  return std::move(stack.top());
+  return output;
 }
 
 }

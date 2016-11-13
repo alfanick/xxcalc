@@ -1,4 +1,3 @@
-#include "node.hpp"
 #include "tokenizer.hpp"
 #include "errors.hpp"
 
@@ -54,16 +53,7 @@ class Parser {
    */
   void register_operator(std::string const& name, int precedence, int associativity);
 
-  /**
-   * Registers new function to the parser. Functions must be
-   * registered as their arity is required for the parsing
-   * process.
-   *
-   * @param name Name of function (value of identifier token)
-   * @param arity Arity of function (number of arguments)
-   */
-  void register_function(std::string const& name, size_t arity);
-
+  // TODO udpate description
   /**
    * Parses list of tokens into abstract syntax tree. The AST
    * obeys rules of precedence. Variety of syntax checks are
@@ -87,27 +77,9 @@ class Parser {
    * @param tokens List of tokens representing a single expression
    * @return Root of AST
    */
-  virtual Node::unique process(TokenList&& tokens) const;
+  virtual TokenList process(TokenList&& tokens) const;
 
   private:
-
-  /**
-   * Creates function node from given token. Arguments are taken
-   * from the stack. It requires exactly  as many arguments as
-   * registered arity, otherwise exception is thrown. This method
-   * can be used for functions or operators as there is not real
-   * difference in behaviour between the two (except operators
-   * always require two arguments).
-   *
-   * @throw OperandMissingError When token represents operator and
-   *                            not enough arguments are on the stack.
-   * @throw ArgumentMissingError When there are not enough arguments
-   *                             on the stack.
-   * @param token Token with operator or function identifier
-   * @param stack Stack of nodes used as input parameters
-   * @return Node representing function with given arguments
-   */
-  Node::unique create_function(Token const& token, std::stack<Node::unique> &stack) const;
 
   /**
    * Compares precedence of two operators. Operator A has lower
@@ -139,26 +111,8 @@ class Parser {
     Operator(int p, int a) : precedence(p), associativity(a) { }
   };
 
-  /**
-   * Container for function metadata
-   */
-  struct Function {
-    //! Arity of function (number of arguments)
-    size_t arity;
-
-    /**
-     * Creates function with given arity
-     *
-     * @param a Arity (number of arguments)
-     */
-    Function(size_t a) : arity(a) { }
-  };
-
   //! Stores registered operators with their metadata
   std::map<std::string, Operator> operators;
-
-  //! Stores registered functions with their metadata
-  std::map<std::string, Function> functions;
 };
 
 }
