@@ -10,6 +10,11 @@ class ParsingError : public std::runtime_error {
   ParsingError(std::string const& msg, size_t position) : std::runtime_error(msg + " at " + std::to_string(position+1)) { }
 };
 
+class EmptyExpressionError : public ParsingError {
+  public:
+  EmptyExpressionError() : ParsingError("Empty expression provided", 0) {}
+};
+
 class UnknownOperatorError : public ParsingError {
   public:
   UnknownOperatorError(std::string const& value, size_t position) : ParsingError("Unknown operator '" + value + "'", position) { }

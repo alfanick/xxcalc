@@ -11,14 +11,13 @@ Parser::Parser() {
   register_operator("*", 5, -1);
   register_operator("/", 5, -1);
   register_operator("^", 10, 1);
-  register_function("log10", 1);
 }
 
 void Parser::register_operator(std::string const& value, int p, int a) {
   operators.emplace(value, Operator(p, a));
 }
 
-void Parser::register_function(std::string const& value, int a) {
+void Parser::register_function(std::string const& value, size_t a) {
   functions.emplace(value, Function(a));
   operators.emplace(value, Operator(std::numeric_limits<int>::max(), -1));
 }
@@ -27,14 +26,10 @@ bool Parser::lower_precedence(Token const& a, Token const& b) const {
   auto operator_a = operators.find(a.value);
   auto operator_b = operators.find(b.value);
 
-  // must exist
-  if (operator_b == operators.end())
-    throw UnknownOperatorError(b.value, b.position);
-
   // depends on associativity
-  return (operator_a->second.associativity == -1 &&
+  return (operator_a->second.associativity < 0 &&
           operator_a->second.precedence <= operator_b->second.precedence) ||
-         (operator_a->second.associativity == 1 &&
+         (operator_a->second.associativity > 0 &&
           operator_a->second.precedence < operator_b->second.precedence);
 }
 
@@ -168,7 +163,11 @@ Node::unique Parser::process(TokenList tokens) const {
     while (stack.size() >= 2)
       stack.pop();
     throw ParsingError("Only single expression is allowed", stack.top()->position);
+  } else
+  if (stack.empty()) {
+    throw EmptyExpressionError();
   }
+
 
   return std::move(stack.top());
 }
