@@ -62,7 +62,7 @@ Node::unique Parser::create_function(Token const& token, std::stack<Node::unique
     stack.pop();
   }
 
-  return Node::unique(new FunctionNode(token.value, std::move(args), token.position));
+  return Node::unique(new FunctionNode(token.value, std::move(args)));
 }
 
 Node::unique Parser::process(TokenList tokens) const {
@@ -77,7 +77,7 @@ Node::unique Parser::process(TokenList tokens) const {
     // convert number to leaf node
     if (token.type == TokenType::NUMBER) {
       // put a number on stack
-      stack.emplace(new ValueNode(token.value, token.position));
+      stack.emplace(new ValueNode(token.value));
 
       // check if implicit multiplication
       if (!tokens.empty() &&
@@ -99,7 +99,7 @@ Node::unique Parser::process(TokenList tokens) const {
         }
       } else {
         // must be a variable/symbol
-        stack.emplace(new SymbolNode(token.value, token.position));
+        stack.emplace(new SymbolNode(token.value));
       }
     } else
     // operator creates a function node
@@ -165,7 +165,7 @@ Node::unique Parser::process(TokenList tokens) const {
   if (stack.size() > 1) {
     while (stack.size() >= 2)
       stack.pop();
-    throw ParsingError("Only single expression is allowed", stack.top()->position);
+    throw ParsingError("Only single expression is allowed", 0);
   } else
   if (stack.empty()) {
     throw EmptyExpressionError();
