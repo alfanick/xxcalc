@@ -1,5 +1,6 @@
 #include <iostream>
 #include "calculator/tokenizer.hpp"
+#include "calculator/parser.hpp"
 
 using namespace XX;
 
@@ -30,12 +31,21 @@ int main(int argc, char** argv) {
   //
 
   Calculator::Tokenizer tokenizer;
+  Calculator::Parser parser;
 
   std::string line;
   while (std::getline(std::cin, line)) {
     Calculator::TokenList tokens = tokenizer.process(line);
-
     std::cout << tokens << std::endl;
+
+    try {
+      Calculator::Node::unique tree = parser.process(tokens);
+      std::cout << tree->evaluate() << std::endl;
+    }
+    catch (Calculator::ParsingError& error) {
+      std::cerr << "[ERROR] " << error.what() << std::endl;
+    }
+
   }
 
   return EXIT_SUCCESS;

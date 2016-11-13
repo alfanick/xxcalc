@@ -7,6 +7,8 @@ add_executable(xxcalc ${APPS_SRC_FILES} "${PROJECT_SOURCE_DIR}/src/apps/xxcalc.c
 add_executable(xxcalc-debug ${APPS_SRC_FILES} "${PROJECT_SOURCE_DIR}/src/apps/xxcalc.cpp")
 add_executable(xxcalc-test ${APPS_SRC_FILES} ${TEST_SRC_FILES} "${PROJECT_SOURCE_DIR}/src/apps/test.cpp")
 
+add_dependencies(xxcalc-test catch)
+
 install(TARGETS xxcalc DESTINATION bin)
 install(TARGETS xxcalc-debug DESTINATION bin)
 install(TARGETS xxcalc-test DESTINATION bin)

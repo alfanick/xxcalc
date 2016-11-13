@@ -1,6 +1,7 @@
 #include "tokenizer.hpp"
 
 #include <iostream>
+#include <cstring>
 
 namespace XX {
 namespace Calculator {
@@ -31,8 +32,14 @@ TokenList Tokenizer::process(std::string const& line) const {
         tokens.emplace_back(TokenType::OPERATOR, position, line[position]);
         position++;
         break;
+      // Separator
+      case ',':
+        tokens.emplace_back(TokenType::SEPARATOR, position);
+        position++;
+        break;
       // Skip white characters
       case ' ':
+      case '\t':
       case '\r':
       case '\n':
         position++;
@@ -196,6 +203,9 @@ std::ostream& operator<<(std::ostream &os, Token const& t) {
       break;
     case TokenType::NUMBER:
       os << "NUMBER " << t.value;
+      break;
+    case TokenType::SEPARATOR:
+      os << "SEPARATOR";
       break;
     case TokenType::UNKNOWN:
       os << "UNKNOWN '" << t.value << "'";

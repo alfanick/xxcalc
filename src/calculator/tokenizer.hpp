@@ -22,6 +22,8 @@ enum class TokenType {
   OPERATOR,
   //! Text identifier (of function or variable)
   IDENTIFIER,
+  //! Argument separator
+  SEPARATOR,
   //! Other not known input
   UNKNOWN
 };
@@ -136,7 +138,7 @@ class Tokenizer {
    * Converts special identifiers into numbers such as
    * Infinity or NaN value.
    *
-   * @param[inmout] tokens Tokenized expression
+   * @param[in,out] tokens Tokenized expression
    */
   void convert_special_numbers(TokenList& tokens) const;
 
@@ -150,6 +152,7 @@ class Tokenizer {
    */
   void merge_signs(TokenList& tokens) const;
 };
+
 
 /**
  * Pretty printer for a token. It includes a position, token
