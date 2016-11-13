@@ -11,6 +11,8 @@ int main(int argc, char** argv) {
   Calculator::Parser parser;
   Calculator::Evaluator evaluator;
 
+  double ans;
+
   evaluator.register_function("+", 2, [](std::vector<double> const& args) {
     return args[0] + args[1];
   });
@@ -35,14 +37,33 @@ int main(int argc, char** argv) {
     return log10(args[0]);
   });
 
+  evaluator.register_function("pi", 0, [](std::vector<double> const& args) {
+    return M_PI;
+  });
+
+  evaluator.register_function("ans", 0, [&ans](std::vector<double> const& args) {
+    return ans;
+  });
+
   std::string line;
   while (std::getline(std::cin, line)) {
     Calculator::TokenList tokens = tokenizer.process(line);
+#ifdef DEBUG
+    std::cerr << "Tokenized: " << std::endl;
+    std::cerr << tokens << std::endl;
+#endif
 
     try {
       tokens = parser.process(std::move(tokens));
 
-      std::cout << evaluator.process(tokens) << std::endl;
+#ifdef DEBUG
+    std::cerr << "Parsed: " << std::endl;
+    std::cerr << tokens << std::endl;
+#endif
+
+      ans = evaluator.process(tokens);
+
+      std::cout << ans << std::endl;
     }
     catch (Calculator::EvaluationError& error) {
       std::cerr << "[EVALUATION] " << error.what() << std::endl;
