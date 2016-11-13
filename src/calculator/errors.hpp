@@ -7,22 +7,7 @@ namespace Calculator {
 
 class ParsingError : public std::runtime_error {
   public:
-  ParsingError(std::string const& msg, size_t position) : std::runtime_error(msg + " at " + std::to_string(position)) { }
-};
-
-class UnexpectedIdentifierError : public ParsingError {
-  public:
-  UnexpectedIdentifierError(std::string const& value, size_t position) : ParsingError("Unexpected identifier '" + value + "'", position) { }
-};
-
-class UnexpectedNumberError : public ParsingError {
-  public:
-  UnexpectedNumberError(std::string const& value, size_t position) : ParsingError("Unexpected number '" + value + "'", position) { }
-};
-
-class UnexpectedOperatorError : public ParsingError {
-  public:
-  UnexpectedOperatorError(std::string const& value, size_t position) : ParsingError("Unexpected operator '" + value + "'", position) { }
+  ParsingError(std::string const& msg, size_t position) : std::runtime_error(msg + " at " + std::to_string(position+1)) { }
 };
 
 class UnknownOperatorError : public ParsingError {
@@ -30,14 +15,29 @@ class UnknownOperatorError : public ParsingError {
   UnknownOperatorError(std::string const& value, size_t position) : ParsingError("Unknown operator '" + value + "'", position) { }
 };
 
-class UnexpectedOpeningBracketError : public ParsingError {
+class UnknownFunctionError : public ParsingError {
   public:
-  UnexpectedOpeningBracketError(size_t position) : ParsingError("Unexpected opening bracket", position) {}
+  UnknownFunctionError(std::string const& value, size_t position) : ParsingError("Unknown function '" + value + "'", position) { }
 };
 
-class UnexpectedClosingBracketError : public ParsingError {
+class ArgumentMissingError : public ParsingError {
   public:
-  UnexpectedClosingBracketError(size_t position) : ParsingError("Unexpected closing bracket", position) {}
+  ArgumentMissingError(std::string const& value, size_t position) : ParsingError("Argument is missing for function '"+value+"'", position) { }
+};
+
+class OperandMissingError : public ParsingError {
+  public:
+  OperandMissingError(std::string const& value, size_t position) : ParsingError("Operand is missing for '"+value+"'", position) { }
+};
+
+class MissingBracketError : public ParsingError {
+  public:
+  MissingBracketError(size_t position) : ParsingError("Bracket is missing", position) { }
+};
+
+class UnbalancedBracketError : public ParsingError {
+  public:
+  UnbalancedBracketError(size_t position) : ParsingError("Unexpected bracket", position) { }
 };
 
 }

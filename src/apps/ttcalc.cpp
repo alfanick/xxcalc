@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
 
     try {
       Calculator::Node::unique tree = parser.process(tokens);
-      std::cout << tree->evaluate() << std::endl;
+      std::cout << tree->tree(0) << std::endl;
     }
     catch (Calculator::ParsingError& error) {
       std::cerr << "[ERROR] " << error.what() << std::endl;

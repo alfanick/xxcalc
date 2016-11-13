@@ -8,6 +8,8 @@ namespace XX {
 namespace Calculator {
 
 struct Node {
+  size_t position;
+
   virtual double evaluate() { return 0.0; };
   virtual std::string id() { return "None"; }
   virtual std::string tree(size_t depth) { return std::string(depth*2, ' ') + id(); }
@@ -15,9 +17,11 @@ struct Node {
   //
 
   typedef std::unique_ptr<Node> unique;
+
+  Node(size_t position) : position(position) { }
 };
 
-struct FunctionNode : Node {
+struct FunctionNode : public Node {
   std::string name;
 
   std::vector<std::unique_ptr<Node>> arguments;
@@ -32,21 +36,21 @@ struct FunctionNode : Node {
 
     return repr;
   }
-  FunctionNode(std::string const& name, std::vector<std::unique_ptr<Node>> && arguments) : name(name), arguments(std::move(arguments)) { }
+  FunctionNode(std::string const& name, std::vector<std::unique_ptr<Node>> && arguments, size_t position) : Node(position), name(name), arguments(std::move(arguments)) { }
 };
 
-struct SymbolNode : Node {
+struct SymbolNode : public Node {
   std::string name;
 
   std::string id() { return "Symbol("+name+")"; }
-  SymbolNode(std::string const& name) : name(name) {}
+  SymbolNode(std::string const& name, size_t position) : Node(position), name(name) {}
 };
 
-struct ValueNode : Node {
+struct ValueNode : public Node {
   double value;
 
   std::string id() { return "Value("+std::to_string(value)+")"; }
-  ValueNode(std::string const& value) : value(std::stod(value)) {}
+  ValueNode(std::string const& value, size_t position) : Node(position), value(std::stod(value)) {}
 
   virtual double evaluate() { return value; }
 };
