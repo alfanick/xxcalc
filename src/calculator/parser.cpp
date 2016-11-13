@@ -65,7 +65,7 @@ Node::unique Parser::create_function(Token const& token, std::stack<Node::unique
   return Node::unique(new FunctionNode(token.value, std::move(args)));
 }
 
-Node::unique Parser::process(TokenList tokens) const {
+Node::unique Parser::process(TokenList&& tokens) const {
   std::stack<Token> ops;
   std::stack<Node::unique> stack;
 

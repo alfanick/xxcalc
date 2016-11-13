@@ -87,7 +87,7 @@ class Parser {
    * @param tokens List of tokens representing a single expression
    * @return Root of AST
    */
-  virtual Node::unique process(TokenList tokens) const;
+  virtual Node::unique process(TokenList&& tokens) const;
 
   private:
 
