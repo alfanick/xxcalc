@@ -180,6 +180,7 @@ void Tokenizer::merge_signs(TokenList& tokens) const {
         // An operator is the sign operator if it is directly at
         // the beginning or after opening bracket or after another operator.
         if (prev == tokens.end() ||
+            prev->type == TokenType::SEPARATOR ||
             prev->type == TokenType::BRACKET_OPENING ||
             prev->type == TokenType::OPERATOR) {
           // Merge with number

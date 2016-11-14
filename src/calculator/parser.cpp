@@ -52,6 +52,13 @@ TokenList Parser::process(TokenList&& tokens) const {
         output.push_back(token);
       }
     } else
+    // separators
+    if (token.type == TokenType::SEPARATOR) {
+      while (!ops.empty() && ops.top().type != TokenType::BRACKET_OPENING) {
+        output.push_back(ops.top());
+        ops.pop();
+      }
+    }
     // operator creates a function node
     if (token.type == TokenType::OPERATOR) {
       // any waiting
