@@ -82,9 +82,9 @@ class UnknownOperatorError : public ParsingError {
   UnknownOperatorError(std::string const& value, size_t position) : ParsingError("Unknown operator '" + value + "'", position) { }
 };
 
-class UnknownFunctionError : public EvaluationError {
+class UnknownSymbolError : public EvaluationError {
   public:
-  UnknownFunctionError(std::string const& value, size_t position) : EvaluationError("Unknown function '" + value + "'", position) { }
+  UnknownSymbolError(std::string const& value, size_t position) : EvaluationError("Unknown symbol '" + value + "'", position) { }
 };
 
 class ArgumentMissingError : public EvaluationError {

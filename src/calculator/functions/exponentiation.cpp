@@ -3,10 +3,11 @@
 
 #include <cmath>
 
+#include <iostream>
+
 namespace XX {
 namespace Calculator {
 namespace Functions {
-
 Value exponentiation(std::vector<Value> const& args) {
   size_t base_degree = args[0].degree();
   size_t exponent_degree = args[1].degree();
@@ -19,7 +20,7 @@ Value exponentiation(std::vector<Value> const& args) {
   } else
   if (base_degree == 1 && args[0][0] == 0) {
     Value v;
-    v[args[1][0]] = 1.0;
+    v[args[1][0]] = pow(args[0][1], args[1][0]);
     return v;
   } else {
     Value v = args[0];
