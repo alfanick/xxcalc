@@ -6,14 +6,19 @@
 namespace XX {
 namespace Calculator {
 
-class ParsingError : public std::runtime_error {
+class Error : public std::runtime_error {
   public:
-  ParsingError(std::string const& msg, size_t position) : std::runtime_error(msg + " at " + std::to_string(position) + " character") { }
+  Error(std::string const& msg) : std::runtime_error(msg) { }
 };
 
-class EvaluationError : public std::runtime_error {
+class ParsingError : public Error {
   public:
-  EvaluationError(std::string const& msg) : std::runtime_error(msg) { }
+  ParsingError(std::string const& msg, size_t position) : Error(msg + " at " + std::to_string(position)) { }
+};
+
+class EvaluationError : public Error {
+  public:
+  EvaluationError(std::string const& msg) : Error(msg) { }
   EvaluationError(std::string const& msg, size_t position) : EvaluationError(msg + " at " + std::to_string(position)) { }
 };
 
@@ -37,9 +42,19 @@ class NoSymbolFound : public SolverError {
   NoSymbolFound() : SolverError("No symbol found in the expression - use x to mark the symbol") { }
 };
 
-class ValueError : public std::runtime_error {
+class ExpressionIsTautology : public SolverError {
   public:
-  ValueError(std::string const& msg) : std::runtime_error(msg) { }
+  ExpressionIsTautology() : SolverError("Provided expression is a tautology") { }
+};
+
+class NonSolvableExpression : public SolverError {
+  public:
+  NonSolvableExpression() : SolverError("Provided expression has no valid solutions") { }
+};
+
+class ValueError : public Error {
+  public:
+  ValueError(std::string const& msg) : Error(msg) { }
 };
 
 class PolynomialCastError : public ValueError {

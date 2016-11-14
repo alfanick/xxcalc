@@ -1,6 +1,8 @@
 #include "linear_solver.hpp"
 #include "errors.hpp"
 
+#include <cmath>
+
 namespace XX {
 namespace Calculator {
 
@@ -21,14 +23,21 @@ LinearSolver::LinearSolver(Tokenizer& tokenizer, Parser& parser) :
       throw NoSymbolFound();
     }
 
-    left[1] -= right[1]; // move x to left
+    left[1] -= right[1];
     right[1] -= right[1];
 
-    right[0] -= left[0]; // move numbers to right
+    right[0] -= left[0];
     left[0] -= left[0];
 
     right[0] /= left[1];
     left[1] /= left[1];
+
+    if (right[0] != right[0]) {
+      throw ExpressionIsTautology();
+    } else
+    if (std::isinf(right[0])) {
+      throw NonSolvableExpression();
+    }
 
     return right;
   });
