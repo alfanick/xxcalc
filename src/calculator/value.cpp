@@ -95,8 +95,10 @@ Value& Value::operator/=(Value const& other) {
   if (self_degree < other_degree) {
     throw PolynomialDivisionError();
   } else
-  if (self_degree == 0 && other_degree == 0) {
-    coefficients[0] /= other.coefficients[0];
+  if (other_degree == 0) {
+    for (unsigned long i = 0; i <= self_degree; i++) {
+      coefficients[i] /= other.coefficients[0];
+    }
     return *this;
   }
 
