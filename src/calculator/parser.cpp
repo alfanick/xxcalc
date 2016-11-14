@@ -5,14 +5,6 @@
 namespace XX {
 namespace Calculator {
 
-Parser::Parser() {
-  register_operator("+", 1, -1);
-  register_operator("-", 1, -1);
-  register_operator("*", 5, -1);
-  register_operator("/", 5, -1);
-  register_operator("^", 10, 1);
-}
-
 void Parser::register_operator(std::string const& value, int p, int a) {
   operators.emplace(value, Operator(p, a));
 }

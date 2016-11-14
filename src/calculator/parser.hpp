@@ -10,33 +10,18 @@ namespace XX {
 namespace Calculator {
 
 /**
- * Parser takes tokenized input and converts it into an abstract
- * syntax tree. Such tree obeys precedence of operators (operator
- * with the lowest procedence becomes a root of AST).
+ * Parser takes tokenized input and converts it from common infix
+ * notation into Reverse Polish Notation. RPN is easier to evaluate
+ * in later steps. RPN form was chosen instead of Abstract Syntax
+ * Tree as evalution of the former is more complex and requires
+ * a large stack size.
  *
  * The parser performs error checking - it requires parentheses
  * to be balanced, operators must be registered and they require
- * two operands (left and right). Functions can be registered with
- * any arity required (an error will be reported if provided
- * arguments are not sufficient).
- *
- * The Abstract Syntax Tree can be a double number ValueNode,
- * a symbol representing variable SymbolNode or a FunctionNode
- * which represents a mathematical operation of a function.
- *
- * The basic instance of the parser support only basic arithmetical
- * operations (addition, subtraction, multiplication, division and
- * exponentation).
+ * two operands (left and right).
  */
 class Parser {
   public:
-
-  /**
-   * Creates an instance of parser. Registers basic mathematical
-   * operations such as addition, subtraction, multiplication,
-   * division and exponentation.
-   */
-  Parser();
 
   /**
    * Registers new operator to the parser. An operator must be
@@ -53,13 +38,12 @@ class Parser {
    */
   void register_operator(std::string const& name, int precedence, int associativity);
 
-  // TODO udpate description
   /**
-   * Parses list of tokens into abstract syntax tree. The AST
-   * obeys rules of precedence. Variety of syntax checks are
-   * performed during the parsing process. Functions and operators
-   * must be registered before they can be parsed, as precedence,
-   * associativity and arity must be known beforehand.
+   * Parses list of tokens into another list of tokens but in RPN
+   * notation. Variety of syntax checks are performed during the
+   * parsing process. Operators must be registered before they
+   * can be parsed, as precedence and associativity must be known
+   * beforehand.
    *
    * Parser is implementing the shunting-yard algorithm by Edsger
    * Dijkstra. Its computation is linear O(n) and no recursion
@@ -68,14 +52,13 @@ class Parser {
    * Shorthand syntax for multiplcation (ie. 2x) is supported,
    * multiplication operator is inserted if required.
    *
-   * @throw UnknownFunctionError When function is not registered
    * @throw UnknownOperatorError When operator is not registered
    * @throw MissingBracketError When brackets are unbalanced
    * @throw ParsingError When multiple expressions are provided
    *                     or other error occurs
    * @throw EmptyExpressionError When no expression is provdied
    * @param tokens List of tokens representing a single expression
-   * @return Root of AST
+   * @return Tokens in RPN
    */
   virtual TokenList process(TokenList&& tokens) const;
 

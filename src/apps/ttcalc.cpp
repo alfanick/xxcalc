@@ -13,18 +13,22 @@ int main(int argc, char** argv) {
 
   Calculator::Value ans;
 
+  parser.register_operator("+", 1, -1);
   evaluator.register_function("+", 2, [](std::vector<Calculator::Value> const& args) {
     return args[0] + args[1];
   });
 
+  parser.register_operator("-", 1, -1);
   evaluator.register_function("-", 2, [](std::vector<Calculator::Value> const& args) {
     return args[0] - args[1];
   });
 
+  parser.register_operator("*", 5, -1);
   evaluator.register_function("*", 2, [](std::vector<Calculator::Value> const& args) {
     return args[0] * args[1];
   });
 
+  parser.register_operator("/", 5, -1);
   evaluator.register_function("/", 2, [](std::vector<Calculator::Value> const& args) {
     return args[0] / args[1];
   });
@@ -33,6 +37,7 @@ int main(int argc, char** argv) {
     return Calculator::Value(0, 1);
   });
 
+  parser.register_operator("^", 10 1);
   evaluator.register_function("^", 2, [](std::vector<Calculator::Value> const& args) {
     size_t base_degree = args[0].degree();
     size_t exponent_degree = args[1].degree();
