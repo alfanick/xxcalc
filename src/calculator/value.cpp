@@ -2,12 +2,44 @@
 #include "errors.hpp"
 #include <iostream>
 #include <algorithm>
+#include <sstream>
 
 namespace XX {
 namespace Calculator {
 
 
-  // std::string repr();
+std::string Value::repr(std::string const& name) const {
+  size_t d = degree();
+
+  if (d == 0)
+    return "0";
+
+  std::ostringstream output;
+  bool need_sign = false;
+
+  for (int i = d-1; i >= 0; i--) {
+    if (coefficients[i] != 0) {
+      if (coefficients[i] > 0 && need_sign) {
+        output << "+";
+        need_sign = false;
+      }
+
+      if (i > 0) {
+        output << coefficients[i] << name;
+
+        if (i > 1) {
+          output << "^" << i;
+        }
+        need_sign = true;
+      } else {
+        output << coefficients[i];
+      }
+
+    }
+  }
+
+  return output.str();
+}
 
 double& Value::operator[](const size_t index) {
   if (index >= coefficients.size()) {
@@ -19,7 +51,7 @@ double& Value::operator[](const size_t index) {
 
 size_t Value::degree() const {
   auto it = std::find_if(coefficients.crbegin(), coefficients.crend(), [](double const& a) {
-    return a > 0;
+    return a != 0;
   });
 
   return coefficients.crend() - it;
@@ -30,6 +62,10 @@ Value::operator double() const {
       throw PolynomialCastError();
 
   return coefficients[0];
+}
+
+Value::operator std::string() const {
+  return repr("x");
 }
 
 Value& Value::operator+=(Value const& other) {

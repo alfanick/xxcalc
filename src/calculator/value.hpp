@@ -11,11 +11,12 @@ class Value {
   Value(double x0) : Value(x0, 0.0) { }
   Value() : Value(0.0) { }
 
-  std::string repr();
 
   double& operator[](const size_t index);
   size_t degree() const;
+  std::string  repr(std::string const& name) const;
   explicit operator double() const;
+  explicit operator std::string() const;
 
   Value& operator+=(Value const& other);
   Value& operator-=(Value const& other);

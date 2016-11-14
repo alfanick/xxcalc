@@ -35,6 +35,8 @@ TEST_CASE("degree", "[value]") {
   REQUIRE(Value(1).degree() == 1);
   REQUIRE(Value({1, 1, 1, 1}).degree() == 4);
   REQUIRE(Value({1, 1, 1, 0, 0, 0}).degree() == 3);
+  REQUIRE(Value({1, 0, 1}).degree() == 3);
+  REQUIRE(Value({1, 0, -1}).degree() == 3);
 }
 
 TEST_CASE("compound assignment", "[value]") {
@@ -85,3 +87,13 @@ TEST_CASE("operations", "[value]") {
   REQUIRE(Value(2) * Value(0,1) == Value(0,2));
 }
 
+TEST_CASE("string conversion", "[value]") {
+  REQUIRE(std::string(Value()) == "0");
+  REQUIRE(std::string(Value(1)) == "1");
+  REQUIRE(std::string(Value(1, 2)) == "2x+1");
+  REQUIRE(std::string(Value({1, 0, 2})) == "2x^2+1");
+  REQUIRE(std::string(Value(-1, 2)) == "2x-1");
+  REQUIRE(std::string(Value({1, 0, -2})) == "-2x^2+1");
+  REQUIRE(std::string(Value({-1, 0, -2})) == "-2x^2-1");
+
+}
