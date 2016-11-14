@@ -36,7 +36,7 @@ PolynomialCalculator::PolynomialCalculator(Tokenizer& tokenizer, Parser& parser)
   });
 }
 
-void PolynomialCalculator::register_function(std::string const& name, size_t arity,
+void PolynomialCalculator::register_function(std::string const& name, unsigned long arity,
                                              std::function<Value(std::vector<Value> const&)> f) {
   evaluator.register_function(name, arity, f);
 }

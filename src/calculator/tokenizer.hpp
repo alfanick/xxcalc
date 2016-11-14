@@ -39,7 +39,7 @@ struct Token {
   //! Type of token
   TokenType type;
   //! Position (relative to the original input)
-  size_t position;
+  unsigned long position;
   //! A value associated with a token (such as operator, number or identifier text)
   std::string value;
 
@@ -49,7 +49,7 @@ struct Token {
    * @param type Type of token
    * @param position Position in original input
    */
-  Token(TokenType type, size_t position) : type(type), position(position) {}
+  Token(TokenType type, unsigned long position) : type(type), position(position) {}
 
   /**
    * Creates a token of given type found at given position
@@ -59,7 +59,7 @@ struct Token {
    * @apram position Position in original input
    * @param value Value of token (useful for operators)
    */
-  Token(TokenType type, size_t position, char value) : type(type), position(position), value(std::string(1, value)) {}
+  Token(TokenType type, unsigned long position, char value) : type(type), position(position), value(std::string(1, value)) {}
 
   /**
    * Creates a token of given type found at given position
@@ -69,7 +69,7 @@ struct Token {
    * @param position Position in original input
    * @param value Value of token (useful for numbers or identifiers)
    */
-  Token(TokenType type, size_t position, std::string &&value) : type(type), position(position), value(value) {}
+  Token(TokenType type, unsigned long position, std::string &&value) : type(type), position(position), value(value) {}
 };
 
 
@@ -121,7 +121,7 @@ class Tokenizer {
    * @param position Starting position for extraction
    * @return Token representing found number
    */
-  Token extract_number(std::string const& line, size_t position) const;
+  Token extract_number(std::string const& line, unsigned long position) const;
 
   /**
    * Extracts text identifier from the line. It assumes that a first
@@ -132,7 +132,7 @@ class Tokenizer {
    * @param position Starting position for extraction
    * @return Token representing found identifier
    */
-  Token extract_identifier(std::string const& line, size_t position) const;
+  Token extract_identifier(std::string const& line, unsigned long position) const;
 
   /**
    * Converts special identifiers into numbers such as

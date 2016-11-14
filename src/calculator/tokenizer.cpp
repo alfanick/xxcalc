@@ -8,7 +8,7 @@ namespace Calculator {
 
 TokenList Tokenizer::process(std::string const& line) const {
   TokenList tokens;
-  size_t position = 0;
+  unsigned long position = 0;
 
   // Process from left to right
   while (position < line.size()) {
@@ -70,7 +70,7 @@ TokenList Tokenizer::process(std::string const& line) const {
   return tokens;
 }
 
-Token Tokenizer::extract_number(std::string const& line, size_t position) const {
+Token Tokenizer::extract_number(std::string const& line, unsigned long position) const {
   Token token(TokenType::NUMBER, position);
 
   // Dot is accepted once
@@ -80,7 +80,7 @@ Token Tokenizer::extract_number(std::string const& line, size_t position) const 
   // Sign is not accepted initially
   bool accept_sign = false;
 
-  size_t current = position;
+  unsigned long current = position;
 
   // Process from left to right
   while (current < line.size()) {
@@ -115,10 +115,10 @@ Token Tokenizer::extract_number(std::string const& line, size_t position) const 
   return token;
 }
 
-Token Tokenizer::extract_identifier(std::string const& line, size_t position) const {
+Token Tokenizer::extract_identifier(std::string const& line, unsigned long position) const {
   Token token(TokenType::IDENTIFIER, position);
 
-  size_t current = position;
+  unsigned long current = position;
 
   // Process from left to right
   while (current < line.size()) {
@@ -231,7 +231,7 @@ std::ostream& operator<<(std::ostream &os, Token const& t) {
 }
 
 std::ostream& operator<<(std::ostream &os, TokenList const& tokens) {
-  size_t level = 0;
+  unsigned long level = 0;
 
   for (const auto& token : tokens) {
     if (token.type == TokenType::BRACKET_CLOSING && level > 0) {

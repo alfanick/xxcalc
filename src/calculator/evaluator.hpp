@@ -38,7 +38,7 @@ class Evaluator {
    * @param arity Required number of arguments
    * @param f Function handler
    */
-  void register_function(std::string const& name, size_t arity, std::function<Value(std::vector<Value> const&)> f);
+  void register_function(std::string const& name, unsigned long arity, std::function<Value(std::vector<Value> const&)> f);
 
   /**
    * Registers new constant to the evaluator. A token with
@@ -84,7 +84,7 @@ class Evaluator {
    */
   struct Function {
     //! Arity of function (number of arguments)
-    size_t arity;
+    unsigned long arity;
     //! Function handle
     std::function<Value(std::vector<Value> const&)> handle;
 
@@ -94,7 +94,7 @@ class Evaluator {
      * @param arity Number of arguments
      * @param handle Function handle
      */
-    Function(size_t arity, std::function<Value(std::vector<Value> const&)> handle) : arity(arity), handle(handle) { }
+    Function(unsigned long arity, std::function<Value(std::vector<Value> const&)> handle) : arity(arity), handle(handle) { }
   };
 
   //! Registered functions

@@ -8,7 +8,7 @@ namespace XX {
 namespace Calculator {
 
 
-double& Value::operator[](const size_t index) {
+double& Value::operator[](const unsigned long index) {
   if (index >= coefficients.size()) {
     coefficients.resize(index+1, 0.0);
   }
@@ -16,11 +16,11 @@ double& Value::operator[](const size_t index) {
   return coefficients[index];
 }
 
-double Value::operator[](const size_t index) const {
+double Value::operator[](const unsigned long index) const {
   return coefficients[index];
 }
 
-size_t Value::degree() const {
+unsigned long Value::degree() const {
   auto it = std::find_if(coefficients.crbegin(), coefficients.crend(), [](double const& a) {
     return a != 0;
   });
@@ -47,7 +47,7 @@ Value& Value::operator+=(Value const& other) {
     coefficients.resize(other.coefficients.size(), 0.0);
   }
 
-  for (size_t i = 0; i < other.coefficients.size(); i++) {
+  for (unsigned long i = 0; i < other.coefficients.size(); i++) {
     coefficients[i] += other.coefficients[i];
   }
 
@@ -59,7 +59,7 @@ Value& Value::operator-=(Value const& other) {
     coefficients.resize(other.coefficients.size(), 0.0);
   }
 
-  for (size_t i = 0; i < other.coefficients.size(); i++) {
+  for (unsigned long i = 0; i < other.coefficients.size(); i++) {
     coefficients[i] -= other.coefficients[i];
   }
 
@@ -67,8 +67,8 @@ Value& Value::operator-=(Value const& other) {
 }
 
 Value& Value::operator*=(Value const& other) {
-  size_t self_degree = degree();
-  size_t other_degree = other.degree();
+  unsigned long self_degree = degree();
+  unsigned long other_degree = other.degree();
 
   if (self_degree == 0 && other_degree == 0) {
     coefficients[0] *= other.coefficients[0];
@@ -77,8 +77,8 @@ Value& Value::operator*=(Value const& other) {
 
   std::vector<double> c(self_degree + other_degree+1, 0.0);
 
-  for (size_t a = 0; a <= self_degree; a++) {
-    for (size_t b = 0; b <= other_degree; b++) {
+  for (unsigned long a = 0; a <= self_degree; a++) {
+    for (unsigned long b = 0; b <= other_degree; b++) {
       c[a+b] += coefficients[a] * other.coefficients[b];
     }
   }
@@ -89,8 +89,8 @@ Value& Value::operator*=(Value const& other) {
 }
 
 Value& Value::operator/=(Value const& other) {
-  size_t self_degree = degree();
-  size_t other_degree = other.degree();
+  unsigned long self_degree = degree();
+  unsigned long other_degree = other.degree();
 
   if (self_degree < other_degree) {
     throw PolynomialDivisionError();
@@ -102,10 +102,10 @@ Value& Value::operator/=(Value const& other) {
 
   Value q;
   while (degree() >= other.degree()) {
-    size_t diff = degree() - other.degree();
+    unsigned long diff = degree() - other.degree();
     Value d;
     d.coefficients.resize(other.degree() + diff + 1, 0);
-    for (size_t i = 0; i <= other.degree(); i++) {
+    for (unsigned long i = 0; i <= other.degree(); i++) {
       d.coefficients[i+diff] = other.coefficients[i];
     }
     q[diff] = coefficients[degree()] / d.coefficients[d.degree()];
@@ -119,10 +119,10 @@ Value& Value::operator/=(Value const& other) {
 }
 
 bool Value::operator==(Value const &other) const {
-  size_t d = degree();
+  unsigned long d = degree();
 
   if (other.degree() == d) {
-    for (size_t i = 0; i <= d; i++)
+    for (unsigned long i = 0; i <= d; i++)
       if (other.coefficients[i] != coefficients[i])
         return false;
 
@@ -153,7 +153,7 @@ const Value Value::operator/(Value const& other) const {
 }
 
 std::string Value::repr(std::string const& name) const {
-  size_t d = degree();
+  unsigned long d = degree();
 
   std::ostringstream output;
 

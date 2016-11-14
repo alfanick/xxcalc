@@ -2,6 +2,7 @@
 #include "errors.hpp"
 
 #include <cmath>
+#include <limits>
 
 namespace XX {
 namespace Calculator {
@@ -13,8 +14,8 @@ LinearSolver::LinearSolver(Tokenizer& tokenizer, Parser& parser) :
 }
 
 Value LinearSolver::solve_operator(std::vector<Value> const& args) {
-  size_t left_degree = args[0].degree();
-  size_t right_degree = args[1].degree();
+  unsigned long left_degree = args[0].degree();
+  unsigned long right_degree = args[1].degree();
 
   Value left = args[0];
   Value right = args[1];

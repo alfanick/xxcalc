@@ -9,8 +9,8 @@ namespace XX {
 namespace Calculator {
 namespace Functions {
 Value exponentiation(std::vector<Value> const& args) {
-  size_t base_degree = args[0].degree();
-  size_t exponent_degree = args[1].degree();
+  unsigned long base_degree = args[0].degree();
+  unsigned long exponent_degree = args[1].degree();
 
   if (exponent_degree > 0) {
     throw ExponentationError("Unable to perform complex exponentation - only constant polynomials supported");
@@ -24,8 +24,8 @@ Value exponentiation(std::vector<Value> const& args) {
     return v;
   } else {
     Value v = args[0];
-    size_t exponent = args[1][0];
-    for (size_t i = 1; i < exponent; i++) {
+    unsigned long exponent = args[1][0];
+    for (unsigned long i = 1; i < exponent; i++) {
       v *= args[0];
     }
     return v;

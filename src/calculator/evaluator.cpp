@@ -62,7 +62,7 @@ Value Evaluator::process(TokenList& tokens) {
   }
 }
 
-void Evaluator::register_function(std::string const& name, size_t arity, std::function<Value(std::vector<Value> const&)> f) {
+void Evaluator::register_function(std::string const& name, unsigned long arity, std::function<Value(std::vector<Value> const&)> f) {
   if (constants.find(name) != constants.end())
     throw ConflictingNameError("Cannot add function '"+name+"' as it name is already used by a constant.");
 

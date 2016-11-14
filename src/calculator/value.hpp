@@ -1,4 +1,5 @@
 #include <vector>
+#include <string>
 
 #pragma once
 
@@ -52,7 +53,7 @@ class Value {
    * @param index Coefficient index
    * @return Reference to coefficient
    */
-  double& operator[](const size_t index);
+  double& operator[](const unsigned long index);
 
   /**
    * Accesses coefficients of the polynomial.
@@ -60,7 +61,7 @@ class Value {
    * @param index Coefficient index
    * @return Coefficient value
    */
-  double operator[](const size_t index) const;
+  double operator[](const unsigned long index) const;
 
   /**
    * Computes degree of the polynomial. A degree is an index
@@ -68,7 +69,7 @@ class Value {
    *
    * @return Degree of polynomial
    */
-  size_t degree() const;
+  unsigned long degree() const;
 
   /**
    * Creates a human readable string representation of

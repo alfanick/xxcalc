@@ -1,4 +1,4 @@
-#include <exception>
+#include <stdexcept>
 #include <string>
 
 #pragma once
@@ -13,13 +13,13 @@ class Error : public std::runtime_error {
 
 class ParsingError : public Error {
   public:
-  ParsingError(std::string const& msg, size_t position) : Error(msg + " at " + std::to_string(position)) { }
+  ParsingError(std::string const& msg, unsigned long position) : Error(msg + " at " + std::to_string(position)) { }
 };
 
 class EvaluationError : public Error {
   public:
   EvaluationError(std::string const& msg) : Error(msg) { }
-  EvaluationError(std::string const& msg, size_t position) : EvaluationError(msg + " at " + std::to_string(position)) { }
+  EvaluationError(std::string const& msg, unsigned long position) : EvaluationError(msg + " at " + std::to_string(position)) { }
 };
 
 class ConflictingNameError : public EvaluationError {
@@ -79,27 +79,27 @@ class EmptyExpressionError : public ParsingError {
 
 class UnknownOperatorError : public ParsingError {
   public:
-  UnknownOperatorError(std::string const& value, size_t position) : ParsingError("Unknown operator '" + value + "'", position) { }
+  UnknownOperatorError(std::string const& value, unsigned long position) : ParsingError("Unknown operator '" + value + "'", position) { }
 };
 
 class UnknownSymbolError : public EvaluationError {
   public:
-  UnknownSymbolError(std::string const& value, size_t position) : EvaluationError("Unknown symbol '" + value + "'", position) { }
+  UnknownSymbolError(std::string const& value, unsigned long position) : EvaluationError("Unknown symbol '" + value + "'", position) { }
 };
 
 class ArgumentMissingError : public EvaluationError {
   public:
-  ArgumentMissingError(std::string const& value, size_t position) : EvaluationError("Argument is missing for function '"+value+"'", position) { }
+  ArgumentMissingError(std::string const& value, unsigned long position) : EvaluationError("Argument is missing for function '"+value+"'", position) { }
 };
 
 class OperandMissingError : public EvaluationError {
   public:
-  OperandMissingError(std::string const& value, size_t position) : EvaluationError("Operand is missing for '"+value+"'", position) { }
+  OperandMissingError(std::string const& value, unsigned long position) : EvaluationError("Operand is missing for '"+value+"'", position) { }
 };
 
 class MissingBracketError : public ParsingError {
   public:
-  MissingBracketError(size_t position) : ParsingError("Bracket is missing", position) { }
+  MissingBracketError(unsigned long position) : ParsingError("Bracket is missing", position) { }
 };
 
 }
