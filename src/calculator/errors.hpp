@@ -22,6 +22,21 @@ class ConflictingNameError : public EvaluationError {
   ConflictingNameError(std::string const& msg) : EvaluationError(msg) { }
 };
 
+class SolverError : public EvaluationError {
+  public:
+  SolverError(std::string const& msg) : EvaluationError(msg) { }
+};
+
+class NonLinearEquation : public SolverError {
+  public:
+  NonLinearEquation() : SolverError("Provided expression is not linear - the solver can process only linear equations") { }
+};
+
+class NoSymbolFound : public SolverError {
+  public:
+  NoSymbolFound() : SolverError("No symbol found in the expression - use x to mark the symbol") { }
+};
+
 class ValueError : public std::runtime_error {
   public:
   ValueError(std::string const& msg) : std::runtime_error(msg) { }

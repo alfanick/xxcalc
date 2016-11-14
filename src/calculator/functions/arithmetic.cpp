@@ -17,7 +17,7 @@ Value multiplication(std::vector<Value> const& args) {
 }
 
 Value division(std::vector<Value> const& args) {
-  return args[0] + args[1];
+  return args[0] / args[1];
 }
 
 }
