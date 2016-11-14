@@ -1,4 +1,5 @@
 #include <exception>
+#include <string>
 
 #pragma once
 
@@ -14,6 +15,16 @@ class EvaluationError : public std::runtime_error {
   public:
   EvaluationError(std::string const& msg) : std::runtime_error(msg) { }
   EvaluationError(std::string const& msg, size_t position) : EvaluationError(msg + " at " + std::to_string(position)) { }
+};
+
+class ValueError : public std::runtime_error {
+  public:
+  ValueError(std::string const& msg) : std::runtime_error(msg) { }
+};
+
+class PolynomialCastError : public ValueError {
+  public:
+  PolynomialCastError() : ValueError("Cannot cast complex polynomial to double value") { }
 };
 
 class EmptyExpressionError : public ParsingError {
