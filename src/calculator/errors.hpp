@@ -27,6 +27,16 @@ class PolynomialCastError : public ValueError {
   PolynomialCastError() : ValueError("Cannot cast complex polynomial to double value") { }
 };
 
+class ExponentationError : public EvaluationError {
+  public:
+  ExponentationError(std::string const& msg) : EvaluationError(msg) { }
+};
+
+class PolynomialDivisionError : public ValueError {
+  public:
+  PolynomialDivisionError() : ValueError("Divisor must be same or lower degree than dividend") { }
+};
+
 class EmptyExpressionError : public ParsingError {
   public:
   EmptyExpressionError() : ParsingError("Empty expression provided", 0) {}

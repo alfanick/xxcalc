@@ -155,9 +155,15 @@ void Tokenizer::convert_special_numbers(TokenList& tokens) const {
 
 void Tokenizer::merge_signs(TokenList& tokens) const {
   // Process from right to left
-  for (auto token = tokens.end(); token != tokens.begin(); --token) {
-    // Look for sign only before a number
-    if (token->type != TokenType::NUMBER)
+  for (auto token = std::prev(tokens.end()); token != tokens.begin(); --token) {
+    // Look for sign only before a number or identifier
+    if (token->type != TokenType::NUMBER &&
+        token->type != TokenType::IDENTIFIER)
+      continue;
+
+    // Already merged
+    if (token->value[0] == '+' ||
+        token->value[0] == '-')
       continue;
 
     auto preceeding = std::prev(token);
@@ -173,10 +179,19 @@ void Tokenizer::merge_signs(TokenList& tokens) const {
         if (prev == tokens.end() ||
             prev->type == TokenType::BRACKET_OPENING ||
             prev->type == TokenType::OPERATOR) {
-          // Merge sign with the number
-          token->value.insert(0, preceeding->value);
-          // Update position of number with a sign
-          token->position = preceeding->position;
+          // Merge with number
+          if (token->type == TokenType::NUMBER) {
+            // Merge sign with the number
+            token->value.insert(0, preceeding->value);
+            // Update position of number with a sign
+            token->position = preceeding->position;
+          } else {
+            // Explicit multiplication of identifiers
+            Token op(TokenType::OPERATOR, token->position, "*");
+            Token sign(TokenType::NUMBER, token->position, preceeding->value + "1");
+            // Insert multiplication
+            tokens.insert(tokens.insert(token, op), sign);
+          }
           // Remove sign operator
           tokens.erase(preceeding);
         }

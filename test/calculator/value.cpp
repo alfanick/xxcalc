@@ -27,16 +27,17 @@ TEST_CASE("casting", "[value]") {
   REQUIRE(Value(1.0) == 1.0);
   REQUIRE(Value(1.0, 0.0) == 1.0);
 
-  REQUIRE_THROWS_AS((double(Value(1.0, 1.0))), PolynomialCastError);
+  double k;
+  REQUIRE_THROWS_AS((k = double(Value(1.0, 1.0))), PolynomialCastError);
 }
 
 TEST_CASE("degree", "[value]") {
   REQUIRE(Value().degree() == 0);
-  REQUIRE(Value(1).degree() == 1);
-  REQUIRE(Value({1, 1, 1, 1}).degree() == 4);
-  REQUIRE(Value({1, 1, 1, 0, 0, 0}).degree() == 3);
-  REQUIRE(Value({1, 0, 1}).degree() == 3);
-  REQUIRE(Value({1, 0, -1}).degree() == 3);
+  REQUIRE(Value(1).degree() == 0);
+  REQUIRE(Value({1, 1, 1, 1}).degree() == 3);
+  REQUIRE(Value({1, 1, 1, 0, 0, 0}).degree() == 2);
+  REQUIRE(Value({1, 0, 1}).degree() == 2);
+  REQUIRE(Value({1, 0, -1}).degree() == 2);
 }
 
 TEST_CASE("compound assignment", "[value]") {
@@ -85,6 +86,9 @@ TEST_CASE("operations", "[value]") {
   REQUIRE(Value({1,2,3}) - Value({1,2,3}) == Value(0));
   REQUIRE(Value({1,2,3}) * Value(2) == Value({2,4,6}));
   REQUIRE(Value(2) * Value(0,1) == Value(0,2));
+  REQUIRE(Value(2) / Value(2) == Value(1));
+  REQUIRE(Value(0,2) / Value(0,1) == Value(2));
+  REQUIRE(Value(0,1) / Value(0,2) == Value(0.5));
 }
 
 TEST_CASE("string conversion", "[value]") {

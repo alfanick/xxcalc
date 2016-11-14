@@ -65,7 +65,8 @@ TokenList Parser::process(TokenList&& tokens) const {
       // any waiting
       while (!ops.empty()) {
         // must be lower precedence
-        if ((ops.top().type == TokenType::OPERATOR || ops.top().type == TokenType::IDENTIFIER) &&
+        if ((ops.top().type == TokenType::OPERATOR ||
+             ops.top().type == TokenType::IDENTIFIER) &&
             lower_precedence(token, ops.top())) {
           // create function with args
           output.push_back(ops.top());
