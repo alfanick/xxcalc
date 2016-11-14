@@ -9,20 +9,11 @@ namespace Calculator {
 PolynomialCalculator::PolynomialCalculator(Tokenizer& tokenizer, Parser& parser) :
   tokenizer(tokenizer), parser(parser) {
 
-  parser.register_operator("+", 1, -1);
-  register_function("+", 2, Functions::addition);
-
-  parser.register_operator("-", 1, -1);
-  register_function("-", 2, Functions::subtraction);
-
-  parser.register_operator("*", 5, -1);
-  register_function("*", 2, Functions::multiplication);
-
-  parser.register_operator("/", 5, -1);
-  register_function("/", 2, Functions::division);
-
-  parser.register_operator("^", 10, 1);
-  register_function("^", 2, Functions::exponentiation);
+  register_operator("+", 1, -1, Functions::addition);
+  register_operator("-", 1, -1, Functions::subtraction);
+  register_operator("*", 5, -1, Functions::multiplication);
+  register_operator("/", 5, -1, Functions::division);
+  register_operator("^", 10, 1, Functions::exponentiation);
 
   register_constant("x", Value(0, 1));
   register_constant("pi", Value(M_PI));
@@ -34,6 +25,13 @@ PolynomialCalculator::PolynomialCalculator(Tokenizer& tokenizer, Parser& parser)
   register_function("ans", 0, [&](std::vector<Value> const& args) {
     return last_value;
   });
+}
+
+void PolynomialCalculator::register_operator(std::string const& name,
+                                             int precedence, int associativity,
+                                             std::function<Value(std::vector<Value> const&)> f) {
+  parser.register_operator(name, precedence, associativity);
+  register_function(name, 2, f);
 }
 
 void PolynomialCalculator::register_function(std::string const& name, unsigned long arity,

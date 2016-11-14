@@ -9,8 +9,7 @@ namespace Calculator {
 
 LinearSolver::LinearSolver(Tokenizer& tokenizer, Parser& parser) :
   PolynomialCalculator(tokenizer, parser) {
-  parser.register_operator("=", std::numeric_limits<int>::min(), -1);
-  register_function("=", 2, solve_operator);
+  register_operator("=", std::numeric_limits<int>::min(), -1, solve_operator);
 }
 
 Value LinearSolver::solve_operator(std::vector<Value> const& args) {
