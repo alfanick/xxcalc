@@ -14,6 +14,7 @@ class Evaluator {
   public:
 
   void register_function(std::string const& name, size_t arity, std::function<Value(std::vector<Value> const&)> f);
+  void register_constant(std::string const& name, Value value);
 
   Value process(TokenList& tokens);
 
@@ -26,6 +27,7 @@ class Evaluator {
     Function(size_t arity, std::function<Value(std::vector<Value> const&)> handle) : arity(arity), handle(handle) { }
   };
   std::map<std::string, Function> functions;
+  std::map<std::string, Value> constants;
 };
 
 }

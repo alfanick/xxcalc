@@ -8,7 +8,17 @@ namespace Calculator {
 
 
 void Evaluator::register_function(std::string const& name, size_t arity, std::function<Value(std::vector<Value> const&)> f) {
+  if (constants.find(name) != constants.end())
+    throw ConflictingNameError("Cannot add function '"+name+"' as it name is already used by a constant.");
+
   functions.emplace(name, Function(arity, f));
+}
+
+void Evaluator::register_constant(std::string const& name, Value value) {
+  if (functions.find(name) != functions.end())
+    throw ConflictingNameError("Cannot add constant '"+name+"' as it name is already used by a function.");
+
+  constants[name] = value;
 }
 
 Value Evaluator::process(TokenList& tokens) {
@@ -23,6 +33,12 @@ Value Evaluator::process(TokenList& tokens) {
     } else
     if (token.type == TokenType::OPERATOR ||
         token.type == TokenType::IDENTIFIER) {
+
+      auto constant = constants.find(token.value);
+      if (constant != constants.end()) {
+        stack.push(constant->second);
+        continue;
+      }
 
       auto function = functions.find(token.value);
       if (function == functions.end()) {

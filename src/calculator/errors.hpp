@@ -17,6 +17,11 @@ class EvaluationError : public std::runtime_error {
   EvaluationError(std::string const& msg, size_t position) : EvaluationError(msg + " at " + std::to_string(position)) { }
 };
 
+class ConflictingNameError : public EvaluationError {
+  public:
+  ConflictingNameError(std::string const& msg) : EvaluationError(msg) { }
+};
+
 class ValueError : public std::runtime_error {
   public:
   ValueError(std::string const& msg) : std::runtime_error(msg) { }

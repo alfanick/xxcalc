@@ -1,5 +1,7 @@
 #include <vector>
 
+#pragma once
+
 namespace XX {
 namespace Calculator {
 

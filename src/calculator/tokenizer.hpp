@@ -148,6 +148,9 @@ class Tokenizer {
    * a sign of the number if it is used at very beginning of the expression,
    * after opening bracket or after another operator.
    *
+   * Furthermore identifiers (such as function names or symbol names)
+   * can be signed too.
+   *
    * @param[in,out] tokens Tokenized expression
    */
   void merge_signs(TokenList& tokens) const;
