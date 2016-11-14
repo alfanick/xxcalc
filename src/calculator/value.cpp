@@ -75,7 +75,7 @@ Value& Value::operator*=(Value const& other) {
     return *this;
   }
 
-  std::vector<double> c(self_degree + other_degree+1, 0.0);
+  std::vector<double> c(self_degree + other_degree+2, 0.0);
 
   for (unsigned long a = 0; a <= self_degree; a++) {
     for (unsigned long b = 0; b <= other_degree; b++) {
@@ -160,7 +160,7 @@ std::string Value::repr(std::string const& name) const {
   std::ostringstream output;
 
   if (d == 0) {
-    output << coefficients[0];
+    output << (coefficients.empty() ? 0 : coefficients[0]);
     return output.str();
   }
 

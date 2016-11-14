@@ -156,9 +156,12 @@ void Tokenizer::convert_special_numbers(TokenList& tokens) const {
 void Tokenizer::merge_signs(TokenList& tokens) const {
   // Process from right to left
   for (auto token = std::prev(tokens.end()); token != tokens.begin(); --token) {
+    // std::cout << *token << std::endl;
+
     // Look for sign only before a number or identifier
-    if (token->type != TokenType::NUMBER &&
-        token->type != TokenType::IDENTIFIER)
+    if (((token->type != TokenType::NUMBER &&
+        token->type != TokenType::IDENTIFIER) ||
+        token->value.empty()) && token->type != TokenType::BRACKET_OPENING)
       continue;
 
     // Already merged
@@ -194,6 +197,7 @@ void Tokenizer::merge_signs(TokenList& tokens) const {
           }
           // Remove sign operator
           tokens.erase(preceeding);
+          token = std::next(token);
         }
       }
     }
