@@ -15,5 +15,5 @@ install(TARGETS xxcalc-test DESTINATION bin)
 
 target_compile_definitions(xxcalc PUBLIC -DNODEBUG)
 target_compile_definitions(xxcalc-debug PUBLIC -DDEBUG)
-target_compile_definitions(xxcalc-test PUBLIC -DDEBUG)
+target_compile_definitions(xxcalc-test PUBLIC -DNODEBUG)
 
