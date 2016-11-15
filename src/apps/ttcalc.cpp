@@ -3,6 +3,7 @@
 #ifdef READLINE_FOUND
 #include <readline/readline.h>
 #include <readline/history.h>
+#define HISTORY_FILE ".xxcalc_history"
 #endif
 
 #include "calculator/tokenizer.hpp"
@@ -17,6 +18,8 @@ int main(int argc, char** argv) {
   Calculator::LinearSolver solver(tokenizer, parser);
 
 #ifdef READLINE_FOUND
+  ::read_history(HISTORY_FILE);
+
   char* line;
   while ((line = ::readline(">>> "))) {
     ::add_history(line);
@@ -47,6 +50,10 @@ int main(int argc, char** argv) {
     free(line);
 #endif
   }
+
+#ifdef READLINE_FOUND
+  ::write_history(HISTORY_FILE);
+#endif
 
   return EXIT_SUCCESS;
 }

@@ -10,6 +10,10 @@ void Parser::register_operator(std::string const& value, int p, int a) {
 }
 
 bool Parser::lower_precedence(Token const& a, Token const& b) const {
+  // functions have always the highest precedence
+  if (b.type == TokenType::IDENTIFIER)
+    return true;
+
   auto operator_a = operators.find(a.value);
   auto operator_b = operators.find(b.value);
 
