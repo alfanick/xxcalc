@@ -14,6 +14,7 @@ TEST_CASE("polynomial calculator", "[calculator]") {
   PolynomialCalculator calculator(tokenizer, parser);
 
   REQUIRE(calc("(3+(4-1))*5") == 30);
+  REQUIRE(calculator.last_value == 30);
 
   SECTION("built-in constants") {
     REQUIRE(calc("x") == Value(0, 1));
@@ -73,5 +74,39 @@ TEST_CASE("polynomial calculator", "[calculator]") {
     REQUIRE(calc("2*(2+2)") == 8);
 
     REQUIRE(calc("2+2-4") == calc("-4+2+2"));
+  }
+}
+
+TEST_CASE("extending calculator", "[calculator]") {
+  Tokenizer tokenizer;
+  Parser parser;
+  PolynomialCalculator calculator(tokenizer, parser);
+
+  SECTION("constants") {
+    REQUIRE_THROWS_AS(calc("foo*2"), UnknownSymbolError);
+
+    calculator.register_constant("foo", 4);
+
+    REQUIRE(calc("foo*2") == 8);
+  }
+
+  SECTION("functions") {
+    REQUIRE_THROWS_AS(calc("bar(1,2)"), UnknownSymbolError);
+
+    calculator.register_function("bar", 2, [](std::vector<Value> const& args) {
+      return args[0] * args[1] + 2;
+    });
+
+    REQUIRE(calc("bar(1,2)") == 4);
+  }
+
+  SECTION("operators") {
+    REQUIRE_THROWS_AS(calc("0=0"), UnknownOperatorError);
+
+    calculator.register_operator("=", 1, -1, [](std::vector<Value> const& args) {
+      return 42;
+    });
+
+    REQUIRE(calc("0=0") == 42);
   }
 }
