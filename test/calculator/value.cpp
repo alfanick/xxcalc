@@ -119,5 +119,13 @@ TEST_CASE("string conversion", "[value]") {
   REQUIRE(std::string(Value(-1, 2)) == "2x-1");
   REQUIRE(std::string(Value({1, 0, -2})) == "-2x^2+1");
   REQUIRE(std::string(Value({-1, 0, -2})) == "-2x^2-1");
+}
 
+TEST_CASE("polynomial evaluation", "[value]") {
+  REQUIRE(Value(1)(2) == 1);
+  REQUIRE(Value(0, 1)(2) == 2);
+  REQUIRE(Value({0, 0, 1})(2) == 4);
+  REQUIRE(Value({0, 0, 2})(2) == 8);
+  REQUIRE(Value({1, 0, 2})(2) == 9);
+  REQUIRE_THROWS_AS(Value({1, 0, 2})({1,2}), PolynomialCastError);
 }

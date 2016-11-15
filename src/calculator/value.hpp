@@ -83,6 +83,14 @@ class Value {
   std::string repr(std::string const& name) const;
 
   /**
+   * Evaluates the polynomial using x as its value.
+   *
+   * @param x Value of x in polynomial (must be constant)
+   * @return Evaluated polynomial
+   */
+  Value operator()(Value const& x) const;
+
+  /**
    * Converts polynomial to singular double value.
    * Makes sense only with polynomial of degree zero
    * (constant polynomials).

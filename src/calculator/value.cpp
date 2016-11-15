@@ -42,6 +42,20 @@ Value::operator std::string() const {
   return repr("x");
 }
 
+Value Value::operator()(Value const& x) const {
+  unsigned long d = degree();
+  double e = 1;
+  double v = double(x);
+  Value result;
+
+  for (unsigned long i = 0; i <= d; i++) {
+    result.coefficients[0] += coefficients[i] * e;
+    e *= v;
+  }
+
+  return result;
+}
+
 Value& Value::operator+=(Value const& other) {
   if (other.coefficients.size() > coefficients.size()) {
     coefficients.resize(other.coefficients.size(), 0.0);

@@ -25,6 +25,10 @@ PolynomialCalculator::PolynomialCalculator(Tokenizer& tokenizer, Parser& parser)
   register_function("ans", 0, [&](std::vector<Value> const& args) {
     return last_value;
   });
+
+  register_function("bind", 2, [](std::vector<Value> const& args) {
+    return args[0](args[1]);
+  });
 }
 
 void PolynomialCalculator::register_operator(std::string const& name,

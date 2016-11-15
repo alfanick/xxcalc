@@ -65,6 +65,7 @@ TEST_CASE("polynomial calculator", "[calculator]") {
     REQUIRE(calc("log10(100)") == 2);
 
     REQUIRE((calc("17"), calc("ans")) == 17);
+    REQUIRE(calc("bind(x^2+5, 2)") == 9);
   }
 
   SECTION("precedence") {
