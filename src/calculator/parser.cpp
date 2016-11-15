@@ -20,7 +20,7 @@ bool Parser::lower_precedence(Token const& a, Token const& b) const {
           operator_a->second.precedence < operator_b->second.precedence);
 }
 
-TokenList Parser::process(TokenList&& tokens) const {
+TokenList Parser::process(TokenList& tokens) const {
   std::stack<Token> ops;
   TokenList output;
 

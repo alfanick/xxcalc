@@ -51,7 +51,7 @@ Value PolynomialCalculator::process(std::string const& line) {
   std::cerr << tokens << std::endl;
 #endif
 
-  tokens = parser.process(std::move(tokens));
+  tokens = parser.process(tokens);
 
 #ifdef DEBUG
   std::cerr << "Parsed '" << line << "': " << std::endl;

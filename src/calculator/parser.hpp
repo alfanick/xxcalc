@@ -60,7 +60,10 @@ class Parser {
    * @param tokens List of tokens representing a single expression
    * @return Tokens in RPN
    */
-  virtual TokenList process(TokenList&& tokens) const;
+  virtual TokenList process(TokenList& tokens) const;
+
+  //! Process r-value reference
+  TokenList process(TokenList&& tokens) const { return process(tokens); }
 
   private:
 
