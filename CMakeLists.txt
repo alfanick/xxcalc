@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.8.8)
 set(PROJECT_NAME_STR xxcalc)
 project(${PROJECT_NAME_STR} CXX)
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/.cmake")
+
 set(CXX_CLANG_FLAGS "-Wall -Wextra -Wno-unused-parameter -std=c++11 -stdlib=libc++ -O3 -march=native")
 set(CXX_GNU_FLAGS "-std=c++11 -Wall -O3 -march=native")
 
