@@ -77,6 +77,9 @@ class Evaluator {
    */
   Value process(TokenList& tokens);
 
+  //! Process r-value reference
+  Value process(TokenList&& tokens) { return process(tokens); }
+
   private:
 
   /**

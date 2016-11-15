@@ -54,6 +54,7 @@ Value Evaluator::process(TokenList& tokens) {
     }
   }
 
+
   // expected a single result
   if (stack.size() == 1) {
     return stack.top();
