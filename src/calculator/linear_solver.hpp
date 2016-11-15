@@ -32,6 +32,21 @@ class LinearSolver : public PolynomialCalculator {
    */
   LinearSolver(Tokenizer& tokenizer, Parser& parser);
 
+  /**
+   * Processes the input expression and returns its computed
+   * value. Sets solved flag if solving has occured.
+   *
+   * @param line Expression (with optional x symbol)
+   * @return Computed polynomial or its value
+   */
+  Value process(std::string const& line);
+
+  /**
+   * Flag marking state of solving. It is true if solving
+   * occured during last process operation.
+   */
+  bool solved;
+
   private:
 
   /**
@@ -57,7 +72,7 @@ class LinearSolver : public PolynomialCalculator {
    * @param args Two operands
    * @return Value of the symbol
    */
-  static Value solve_operator(std::vector<Value> const& args);
+   Value solve_operator(std::vector<Value> const& args);
 };
 
 }

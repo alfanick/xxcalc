@@ -35,4 +35,10 @@ TEST_CASE("solver", "[calculator]") {
     REQUIRE_THROWS_AS(solve("x=x"), ExpressionIsTautology);
     REQUIRE_THROWS_AS(solve("x=x+1"), NonSolvableExpression);
   }
+
+  SECTION("solving flag") {
+    REQUIRE((solve("2"), solver.solved) == false);
+    REQUIRE((solve("x=2"), solver.solved) == true);
+    REQUIRE((solve("2"), solver.solved) == false);
+  }
 }

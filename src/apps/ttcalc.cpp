@@ -16,7 +16,6 @@ int main(int argc, char** argv) {
   Calculator::Parser parser;
   Calculator::LinearSolver solver(tokenizer, parser);
 
-
 #ifdef READLINE_FOUND
   char* line;
   while ((line = ::readline(">>> "))) {
@@ -27,7 +26,12 @@ int main(int argc, char** argv) {
 #endif
 
     try {
-      std::cout << std::string(solver.process(line)) << std::endl;
+      Calculator::Value result = solver.process(line);
+
+      if (solver.solved)
+        std::cout << "x=";
+
+      std::cout << std::string(result) << std::endl;
     }
     catch (Calculator::ValueError& error) {
       std::cerr << "[VALUE] " << error.what() << std::endl;
