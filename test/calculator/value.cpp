@@ -2,6 +2,8 @@
 #include "calculator/errors.hpp"
 #include "catch.hpp"
 
+#include <limits>
+
 using namespace XX::Calculator;
 
 TEST_CASE("initialization", "[value]") {
@@ -71,6 +73,23 @@ TEST_CASE("compound assignment", "[value]") {
     REQUIRE(a[5] == 24);
   }
 
+  SECTION("division") {
+    Value a({-10, -3, 1});
+    Value b(2, 1);
+
+    a /= b;
+
+    REQUIRE(a.degree() == 1);
+    REQUIRE(a[0] == -5);
+    REQUIRE(a[1] == 1);
+
+    b = Value({1, 2, 3, 4});
+    REQUIRE(a.degree() < b.degree());
+    REQUIRE_THROWS_AS(a /= b, PolynomialDivisionError);
+
+    b = Value();
+    REQUIRE_THROWS_AS(a /= b, PolynomialDivisionError);
+  }
 }
 
 TEST_CASE("comparison", "[value]") {
@@ -86,6 +105,7 @@ TEST_CASE("operations", "[value]") {
   REQUIRE(Value({1,2,3}) - Value({1,2,3}) == Value(0));
   REQUIRE(Value({1,2,3}) * Value(2) == Value({2,4,6}));
   REQUIRE(Value(2) * Value(0,1) == Value(0,2));
+  REQUIRE(Value(2) / Value(0) == Value(std::numeric_limits<double>::infinity()));
   REQUIRE(Value(2) / Value(2) == Value(1));
   REQUIRE(Value(0,2) / Value(0,1) == Value(2));
   REQUIRE(Value(0,1) / Value(0,2) == Value(0.5));
