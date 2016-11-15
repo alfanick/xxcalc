@@ -43,6 +43,9 @@ int main(int argc, char** argv) {
       std::cerr << "[PARSING] " << error.what() << std::endl;
     }
 
+#ifdef READLINE_FOUND
+    free(line);
+#endif
   }
 
   return EXIT_SUCCESS;
