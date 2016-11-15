@@ -8,7 +8,8 @@ namespace Calculator {
 /**
  * Linear solver extends polynomial calculator with basic
  * solving capabilities. This solver can solve simple
- * linear equations.
+ * linear equations and perform every other operation
+ * available in polynomial calculator.
  *
  * A new operator '=' is defined - it solves a single linear
  * equation (a polynomial with degree equal 1) for symbol x.
