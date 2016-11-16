@@ -84,6 +84,7 @@ class Value {
 
   /**
    * Evaluates the polynomial using x as its value.
+   * Uses quick Horner method to make calculations.
    *
    * @param x Value of x in polynomial (must be constant)
    * @return Evaluated polynomial
