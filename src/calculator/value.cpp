@@ -54,7 +54,7 @@ Value Value::operator()(Value const& x) const {
 }
 
 Value& Value::operator+=(Value const& other) {
-  if (other.coeffcients.size() > coefficients.size()) {
+  if (other.coefficients.size() > coefficients.size()) {
     coefficients.resize(other.coefficients.size(), 0.0);
   }
 
