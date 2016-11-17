@@ -33,7 +33,7 @@ unsigned long Value::degree() const {
 
 Value::operator double() const {
   if (degree() > 0)
-      throw PolynomialCastError();
+    throw PolynomialCastError();
 
   return coefficients[0];
 }
