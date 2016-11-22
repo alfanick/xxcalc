@@ -3,6 +3,7 @@
 #ifdef READLINE_FOUND
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <cstring>
 #define HISTORY_FILE ".xxcalc_history"
 #endif
 
@@ -22,7 +23,8 @@ int main(int argc, char** argv) {
 
   char* line;
   while ((line = ::readline(">>> "))) {
-    ::add_history(line);
+    if (strlen(line) < 1024)
+      ::add_history(line);
 #else
   std::string line;
   while (std::getline(std::cin, line)) {
